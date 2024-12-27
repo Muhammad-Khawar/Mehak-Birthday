@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mehak's Birthday Countdown</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to bottom, #ffccff, #ff99cc, #ff66b2);
+            color: white;
+            text-align: center;
+            padding: 0;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        h1 {
+            font-size: 4rem;
+            margin-bottom: 10px;
+            animation: fadeIn 2s ease-in-out;
+        }
+        p {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            animation: slideIn 2s ease-in-out;
+        }
+        input, button {
+            padding: 12px 25px;
+            font-size: 1.2rem;
+            margin: 10px 5px;
+            border: none;
+            border-radius: 8px;
+        }
+        input[type="date"] {
+            background: white;
+            color: #333;
+        }
+        button {
+            background-color: #ff4081;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        button:hover {
+            background-color: #e91e63;
+            transform: scale(1.05);
+        }
+        #countdown {
+            font-size: 2.5rem;
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            animation: bounce 3s infinite;
+        }
+        .name {
+            font-size: 3rem;
+            color: #ffe57f;
+            text-shadow: 2px 2px #e91e63, 0 0 20px #ff4081;
+            animation: glow 1.5s infinite alternate;
+        }
+        .balloons {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+        .balloon {
+            position: absolute;
+            bottom: -150px;
+            width: 50px;
+            height: 70px;
+            background: radial-gradient(circle at bottom, #ff4081, #e91e63);
+            border-radius: 50%;
+            animation: floatUp 8s linear infinite;
+        }
+        .balloon:nth-child(2) { left: 20%; animation-delay: 2s; }
+        .balloon:nth-child(3) { left: 40%; animation-delay: 4s; }
+        .balloon:nth-child(4) { left: 60%; animation-delay: 6s; }
+        .balloon:nth-child(5) { left: 80%; animation-delay: 8s; }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-50%) scale(1.1); }
+            100% { transform: translateY(-150%) scale(1); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        @keyframes glow {
+            from { text-shadow: 2px 2px #e91e63, 0 0 20px #ff4081; }
+            to { text-shadow: 2px 2px #e91e63, 0 0 40px #ff4081; }
+        }
+    </style>
+</head>
+<body>
+    <div class="balloons">
+        <div class="balloon"></div>
+        <div class="balloon"></div>
+        <div class="balloon"></div>
+        <div class="balloon"></div>
+        <div class="balloon"></div>
+    </div>
+    <h1>Countdown to <span class="name">Mehak's Birthday!</span></h1>
+    <p>We can't wait to celebrate your special day on January 31!</p>
+    <input type="date" id="birthday" value="2024-01-31" />
+    <button onclick="startCountdown()">Start Countdown</button>
+    <div id="countdown"></div>
+
+    <script>
+        function startCountdown() {
+            const birthdayInput = document.getElementById('birthday').value;
+            if (!birthdayInput) {
+                alert('Please select a date!');
+                return;
+            }
+
+            const birthday = new Date(birthdayInput);
+            const now = new Date();
+            birthday.setFullYear(now.getFullYear()); // Set to the current year
+            
+            // Adjust for next year's birthday if the date has already passed this year
+            if (birthday < now) {
+                birthday.setFullYear(now.getFullYear() + 1);
+            }
+
+            const countdownElement = document.getElementById('countdown');
+            countdownElement.innerText = ""; // Clear any existing message
+
+            const countdownInterval = setInterval(() => {
+                const now = new Date();
+                const diff = birthday - now;
+
+                if (diff <= 0) {
+                    clearInterval(countdownInterval);
+                    countdownElement.innerHTML = 
+                        "<span style='color: #4caf50; font-size: 2.5rem;'>🎉 Happy Birthday Mehak! 🎂</span>";
+                    return;
+                }
+
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+                countdownElement.innerHTML = 
+                    `<strong>${days}</strong> Days <strong>${hours}</strong> Hours <strong>${minutes}</strong> Minutes <strong>${seconds}</strong> Seconds`;
+            }, 1000);
+        }
+
+        // Start countdown automatically for the default date
+        window.onload = startCountdown;
+    </script>
+</body>
+</html>
